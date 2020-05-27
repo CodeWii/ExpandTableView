@@ -38,6 +38,7 @@
     if (!_expandTableView) {
         _expandTableView = [[ExpandTableView alloc] initWithFrame:CGRectMake(0, 83, WP_ScreenW, WP_ScreenH-83-49)];
         _expandTableView.delegate = self;
+        _expandTableView.isMultiple = YES;
     }
     return _expandTableView;
 }

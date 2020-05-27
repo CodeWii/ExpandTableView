@@ -28,6 +28,8 @@ static NSString *headerID = @"headerID";
     self = [super initWithFrame:frame];
     if (self) {
         [self addSubview:self.tableView];
+        
+        self.isMultiple = NO; // 默认单选
     }
     return self;
 }
@@ -64,7 +66,7 @@ static NSString *headerID = @"headerID";
         header = [[ExpandTableHeader alloc] initWithReuseIdentifier:[NSString stringWithFormat:@"h%ld",section]];
     }
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(action_tap:)];
-    header.tag = 300 + section;
+    header.tag = 999 + section;
     [header addGestureRecognizer:tap];
     header.titleLab.text = [NSString stringWithFormat:@"%@",self.sectionArr[section]];
     
@@ -83,16 +85,20 @@ static NSString *headerID = @"headerID";
 }
 
 - (void)action_tap:(UIGestureRecognizer *)tap{
-    NSString *index = [NSString stringWithFormat:@"%ld",tap.view.tag - 300];
+    NSString *index = [NSString stringWithFormat:@"%ld",tap.view.tag - 999];
 
-    // 如果重复点击，返回
-    if (index == self.lastIndex) return;
-    
-    // 如果上次有点击，关闭上次section并刷新
-    if (self.lastIndex) {
-        [self.expandDic setObject:@"0" forKey:self.lastIndex];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:[self.lastIndex integerValue]] withRowAnimation:UITableViewRowAnimationFade];
+    // 单选/多选
+    if (!self.isMultiple) {
+        // 如果重复点击，返回
+        if (index == self.lastIndex) return;
+        
+        // 如果上次有点击，关闭上次section并刷新
+        if (self.lastIndex) {
+            [self.expandDic setObject:@"0" forKey:self.lastIndex];
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:[self.lastIndex integerValue]] withRowAnimation:UITableViewRowAnimationFade];
+        }
     }
+    
     //如果是0，就把1赋给字典,打开cell
     if ([self.expandDic[index] integerValue] == 0) {
         [self.expandDic setObject:@"1" forKey:index];

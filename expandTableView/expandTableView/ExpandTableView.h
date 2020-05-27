@@ -14,12 +14,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 - (void)tableViewDidSelectRowAtIndexPath:(NSIndexPath *)indexPath;
-
 @end
 
 @interface ExpandTableView : UIView
 
 - (void)initWithData:(NSArray *)data;
+
+/** 是否多选 default 单选 */
+@property (nonatomic, assign) BOOL isMultiple;
 
 @property (nonatomic, weak) id<ExpandTableViewDelegate> delegate;
 
